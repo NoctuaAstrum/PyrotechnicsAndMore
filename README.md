@@ -14,7 +14,7 @@ Copy your .ggb file where your points are to the files/read directory (HyLogo.gg
 
 ##### 3)
 Open the Main.java file (its under src/main/java/com/github/NoctuaAstrum)
-There is some example cide you can look at
+There is some example code you can look at
 
 ##### 4)
 Specify your settings using Configs.\[configToChange]
