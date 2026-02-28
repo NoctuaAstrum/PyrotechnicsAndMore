@@ -5,7 +5,7 @@ This project aims to help Hytale modders with creating shapes using particleSpaw
 
 ### How to use
 ##### Prerequisites
-Currently you need to have a Geogebra file that contains points in the graphing mode. Currently one 2d (x and y axis) is supported. Any points that shouldn't be written need to contain "temp" in their name. The position and case is irrelevant, just the order of letters needs to be present. You also need to know how to write basic java (Later the priject will come as an executable .jar (always be aware of potential viruses) with a GUI)
+Currently you need to have a Geogebra file that contains points in the graphing mode. At the moment only 2d (x and y axis) is supported. Any points that shouldn't be written need to contain "temp" in their name. The position and case is irrelevant, just the order of letters needs to be present. You also need to know how to write basic java (Later the priject will come as an executable .jar (always be aware of potential viruses) with a GUI)
 
 ##### 1)
 Clone this project and preferably open it in IntelliJ or Eclipse
