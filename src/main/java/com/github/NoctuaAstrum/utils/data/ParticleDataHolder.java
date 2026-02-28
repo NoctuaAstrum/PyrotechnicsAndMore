@@ -20,7 +20,6 @@ public class ParticleDataHolder {
         public final int maxConcurrent;
         public final double startDelay;
         public final ArrayList<AttractorData> attractors;
-        public final boolean noAttractors;
         public final double systemLifeSpan;
         public final double systemCullDistance;
         public final double systemBoundingRadius;
@@ -53,9 +52,6 @@ public class ParticleDataHolder {
         this.totalSpawners = dataBuilder.totalSpawners;
         this.initialVelocity = dataBuilder.initialVelocity;
         this. emitOffset = dataBuilder.emitOffset;
-
-        noAttractors = attractors.isEmpty();
-
         
     }
 
@@ -100,9 +96,8 @@ public class ParticleDataHolder {
     }
     private ParticleAttractor[] createParticleAttractorArray(XYZData p){
 
-        ParticleAttractor[] paArray = new ParticleAttractor[attractors.size()];
-
-        if(!noAttractors){
+        if(!attractors.isEmpty()){
+            ParticleAttractor[] paArray = new ParticleAttractor[attractors.size()];
             for (int i = 0; i < paArray.length; i++) {
                 //System.out.println(i);
                 paArray[i] = new ParticleAttractor(
