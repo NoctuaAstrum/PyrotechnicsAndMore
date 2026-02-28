@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<construction title="" author="" date="0">
+<element type="point" label="tempA">
+	<show object="true" label="true"/>
+	<objColor r="21" g="101" b="192" alpha="0.0"/>
+	<layer val="0"/>
+	<labelMode val="0"/>
+	<animation step="0.1" type="1" playing="false"/>
+	<pointSize val="5"/>
+	<pointStyle val="0"/>
+	<coords x="-1.00" y="-1.00" z="1.0"/>
+</element>
+<expression label="B" exp="(24.39334885971828, -25.90758078392009)" type="point"/>
+<element type="point" label="tempB">
+	<show object="true" label="true"/>
+	<objColor r="21" g="101" b="192" alpha="0.0"/>
+	<layer val="0"/>
+	<labelMode val="0"/>
+	<animation step="0.1" type="1" playing="false"/>
+	<pointSize val="5"/>
+	<pointStyle val="0"/>
+	<coords x="1.00" y="-1.00" z="1.0"/>
+</element>
+<element type="image" label="Bild1">
+	<file name="/picker/0/com.android.providers.media.photopicker/media/1000084679.png"/>
+	<inBackground val="false"/>
+	<startPoint number="0" exp="tempA"/>
+	<startPoint number="1" exp="tempB"/>
+	<show object="true" label="false"/>
+	<objColor r="0" g="0" b="0" alpha="1.0"/>
+	<layer val="0"/>
+	<labelMode val="0"/>
+	<animation step="0.1" type="0" playing="false"/>
+</element>
+<element type="point" label="C">
+	<show object="true" label="true"/>
+	<objColor r="21" g="101" b="192" alpha="0.0"/>
+	<layer val="0"/>
+	<labelMode val="0"/>
+	<animation step="0.1" type="1" playing="false"/>
+	<pointSize val="5"/>
+	<pointStyle val="0"/>
+	<coords x="-1.00" y="-1.00" z="1.0"/>
+</element>
+<element type="point" label="D">
+	<show object="true" label="true"/>
+	<objColor r="21" g="101" b="192" alpha="0.0"/>
+	<layer val="0"/>
+	<labelMode val="0"/>
+	<animation step="0.1" type="1" playing="false"/>
+	<pointSize val="5"/>
+	<pointStyle val="0"/>
+	<coords x="1.00" y="1.00" z="1.0"/>
+</element>
+</construction>
