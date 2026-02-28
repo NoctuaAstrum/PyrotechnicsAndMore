@@ -32,7 +32,6 @@ public class Main {
         ParticleDataHolder example =
                 new ParticleDataHolder.Builder()
                         //specify values of the System and SpawnerGroups
-                        .aaa_required("Hylogo","YourParticleSpawner")
                         .attractor(new AttractorData.Builder()
                                 //specify the values of the Attractor, currently supports only one
                                 .pointShapeExpansion(3)
@@ -50,7 +49,7 @@ public class Main {
                         .singleSpawn()
                         .startDelay(1)
                         //build it
-                        .buildAndReturn();
+                        .build("Hylogo","YourParticleSpawner");
 
         //convert it to a particleSystem
         ParticleSystem exampleSystem = example.convertToParticleSystem();
