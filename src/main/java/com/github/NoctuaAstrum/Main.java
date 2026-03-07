@@ -21,10 +21,10 @@ public class Main {
 
 
         //example configs//
-        Configs.printReadResult(true);
-        Configs.fileType(Configs.SupportedFileType.GGB);
+        Configs.setPrintReadResult(true);
+        Configs.setFileType(Configs.SupportedFileType.GGB);
         Configs.setExportName("EXAMPLE");
-        Configs.readingScaleFactor(0.1);
+        Configs.setReadingScaleFactor(0.1);
 
         //an example//
 
