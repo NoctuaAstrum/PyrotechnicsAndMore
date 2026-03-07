@@ -169,25 +169,6 @@ public class ParticleDataHolder {
         private VelocityData initialVelocity;
         private MinMaxXYZData emitOffset;
 
-
-        /**
-         * Needs to be done to work correctly
-         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#fileType(Configs.SupportedFileType)}
-         * @param particleSpawnerID the ID of the particleSpawner that is used for the point
-         */
-        @Deprecated
-        private Builder aaa_required(String filename, String particleSpawnerID){
-            this.fileName = filename;
-            this.particleSpawnerID = particleSpawnerID;
-            switch (Configs.getFileType()){
-                case GGB -> this.pointData = PointReader.readFileGGB(filename);
-                case XML -> this.pointData = PointReader.readFileXML(filename);
-                default -> {
-                    System.out.println("Error! FileType is neither .ggb nor .xml;");System.exit(-1);
-                }
-            }
-            return this;
-        }
         
 
         public Builder centreOffset(XYZData centreOffset){this.centreOffset=centreOffset;return this;}
