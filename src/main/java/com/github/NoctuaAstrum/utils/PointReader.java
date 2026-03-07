@@ -20,30 +20,36 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
  public class PointReader {
-    private final static Pattern pattern = Pattern.compile("-?[0-9]*\\.[0-9]+");
+    private final static Pattern pattern;
     private static LinkedHashMap<String, XYZData> mapData;
     private static double scaleFactor;
 
 
     static{
+        pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+");
         mapData = new LinkedHashMap<>();
         scaleFactor = Configs.getReadingScaleFactor();
     }
 
-    public static PointData readFileXML(String filename){
+    public static PointData readFile(String filename){
         try {
-            return toPointData(readFileXML0(filename));
+            switch (Configs.getFileType()){
+                case GGB -> {
+                    return toPointData(readFileGGB0(filename));
+                }
+                case XML -> {
+                    return toPointData(readFileXML0(filename));
+                }
+                case null, default -> {
+                    System.out.println("Error! FileType is neither .ggb nor .xml;");System.exit(-1);
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
-     public static PointData readFileGGB(String filename){
-         try {
-             return toPointData(readFileGGB0(filename));
-         } catch (IOException e) {
-             throw new RuntimeException(e);
-         }
-     }
+
     private static List<String> readFileGGB0(String filename) throws IOException {
         Path ggbPath = Paths.get("files/read/"+filename+".ggb");
         ZipFile ggbFile = new ZipFile(ggbPath.toFile());
@@ -143,7 +149,7 @@ import java.util.zip.ZipFile;
         }
         logBuffer.forEach(System.out::println);
         if(sentPatternWarning){
-            System.out.println("[ERROR-INFO] These errors were caused, because a coordinate of the points was near 0.0 and to accommodate the detail, E notation was used by Geogebra, which is not currently supported. To fix this, please manually round the number in Geogebra.");
+            System.out.println("[ERROR-INFO] These errors were caused, because a coordinate of the point was near 0.0 and to accommodate the detail, E notation was used by Geogebra, which is not currently supported. To fix this, please manually round the number in Geogebra.");
         }
         return mapping;
     }

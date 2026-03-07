@@ -216,13 +216,7 @@ public class ParticleDataHolder {
         public ParticleDataHolder build(String filename, String particleSpawnerID){
             this.fileName = filename;
             this.particleSpawnerID = particleSpawnerID;
-            switch (Configs.getFileType()){
-                case GGB -> this.pointData = PointReader.readFileGGB(filename);
-                case XML -> this.pointData = PointReader.readFileXML(filename);
-                default -> {
-                    System.out.println("Error! FileType is neither .ggb nor .xml;");System.exit(-1);
-                }
-            }
+            this.pointData = PointReader.readFile(filename);
             return new ParticleDataHolder(this);
         }
     }
