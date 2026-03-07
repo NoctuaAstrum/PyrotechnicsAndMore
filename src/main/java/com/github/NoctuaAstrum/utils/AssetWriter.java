@@ -65,9 +65,8 @@ public class AssetWriter {
 
     // /////////////// File //////////////// //
     private static void toJsonFile0(ParticleSystem pS){
-        Gson gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
-        List<String> code = Arrays.stream(gson.toJson(pS).split("\n")).toList();
+        List<String> code = Arrays.stream(Configs.gson.toJson(pS).split("\n")).toList();
         Path output;
 
         if(Configs.getExportName().equals("undefined")){

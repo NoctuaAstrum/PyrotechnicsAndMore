@@ -100,18 +100,19 @@ public class ParticleDataHolder {
             ParticleAttractor[] paArray = new ParticleAttractor[attractors.size()];
             for (int i = 0; i < paArray.length; i++) {
                 //System.out.println(i);
+                AttractorData current = attractors.get(i);
                 paArray[i] = new ParticleAttractor(
                         validateAttractorPosition(p, i),
-                        null,
-                        0,
-                        0,
-                        0,
-                        0,
-                        attractors.get(i).linearAccelerations,
-                        0,
-                        0,
+                        current.radialAxis,
+                        current.trailPositionMultiplier,
+                        current.radius,
+                        current.radialAcceleration,
+                        current.radialTangentAcceleration,
+                        current.linearAccelerations,
+                        current.radialImpulse,
+                        current.radialTangentImpulse,
                         validateAttractorImpulses(p, i),
-                        null);
+                        current.dampingMultipliers);
             }
             return paArray;
         }else{
@@ -209,7 +210,7 @@ public class ParticleDataHolder {
 
         /***
          * Builds the {@link ParticleDataHolder} and inputs always required variables
-         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#fileType(Configs.SupportedFileType)}
+         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#setFileType(Configs.SupportedFileType)}
          * @param particleSpawnerID the ID of the particleSpawner that is used for the point
          * @return returns a {@link ParticleDataHolder}
          */
