@@ -26,7 +26,7 @@ import java.util.zip.ZipFile;
 
 
     static{
-        pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+");
+        pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+E?[+-]?[0-9]?");
         mapData = new LinkedHashMap<>();
         scaleFactor = Configs.getReadingScaleFactor();
     }
@@ -125,11 +125,11 @@ import java.util.zip.ZipFile;
                 sentAlreadyAssignedWarning = true;
                 continue;
             }
-            if(current.contains("E-")){
+            /*if(current.contains("E-")){
                 logBuffer.add("[ERROR] Unable to read Point correctly! \"E-\" pattern found for point " + name +", but this is not supported. Point was skipped.");
                 sentPatternWarning = true;
                 continue;
-            }
+            }*/
 
             matcher = pattern.matcher(current);
             pointCoords = new ArrayList<>();
