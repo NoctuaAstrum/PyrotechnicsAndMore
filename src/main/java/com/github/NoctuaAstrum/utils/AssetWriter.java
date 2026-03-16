@@ -69,7 +69,7 @@ public class AssetWriter {
         if(Configs.getExportName().equals("undefined")){
              output = Path.of("files/write/generated"+".particlesystem");
         }else {
-             output = Path.of("files/write/"+Configs.getExportName()+".particlesystem.txt");
+             output = Path.of("files/write/"+Configs.getExportName()+".particlesystem");
         }
         if(Configs.printToConsoleInstead){
             code.forEach(System.out::println);
