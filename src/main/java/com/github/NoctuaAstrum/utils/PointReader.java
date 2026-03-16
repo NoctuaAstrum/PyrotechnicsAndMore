@@ -108,9 +108,7 @@ import java.util.zip.ZipFile;
         Matcher matcher;
         String name = "";
         List<Double> pointCoords;
-        ArrayList<String> logBuffer = new ArrayList<>();
         boolean sentAlreadyAssignedWarning = false;
-        boolean sentPatternWarning = false;
         for (String current : s) {
             if (!(current.contains("="))) {
                 name = current;
@@ -124,11 +122,6 @@ import java.util.zip.ZipFile;
                 System.out.println("[WARNING] Point " +name+ " was already assigned "+mapping.get(name)+" but next line was: "+current);
                 sentAlreadyAssignedWarning = true;
                 continue;
-            }
-            if(current.contains("E-")){
-                logBuffer.add("[ERROR] Unable to read Point correctly! \"E-\" pattern found for point " + name +", but this is not supported. Point was skipped.");
-                sentPatternWarning = true;
-                //continue;
             }
 
             matcher = pattern.matcher(current);
@@ -146,10 +139,6 @@ import java.util.zip.ZipFile;
         }
         if(sentAlreadyAssignedWarning){
             System.out.println("[WARNING-INFO] The prior warnings happened because the file included non point data that had coordinate data (e.g. lines). Normally this shouldn't cause any problems. Please check if the assigned value is correct. If not, please file a bug report including the file you wanted to read");
-        }
-        logBuffer.forEach(System.out::println);
-        if(sentPatternWarning){
-            System.out.println("[ERROR-INFO] These errors were caused, because a coordinate of the point was near 0.0 and to accommodate the detail, E notation was used by Geogebra, which is not currently supported. To fix this, please manually round the number in Geogebra.");
         }
         return mapping;
     }
