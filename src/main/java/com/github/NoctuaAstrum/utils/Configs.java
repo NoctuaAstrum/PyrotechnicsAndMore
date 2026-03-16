@@ -5,14 +5,14 @@ package com.github.NoctuaAstrum.utils;
  * Controls the configurations of file creation and reading as well as logging tools
  */
 public class Configs {
-    private static boolean printReadResult;
-    private static SupportedFileType fileType;
-    private static double readingScaleFactor;
-    private static String exportName;
-    private static String importDirectory;
+    static boolean printReadResult;
+    static SupportedFileType fileType;
+    static double readingScaleFactor;
+    static String exportName;
+    static String importDirectory;
     static boolean printToConsoleInstead;
-    
-    private static ExportMode exportMode;
+    static ExportMode exportMode;
+    static int decimals;
 
      static {
          printReadResult = false;
@@ -22,6 +22,7 @@ public class Configs {
          importDirectory = "files/read/";
          exportMode = ExportMode.NEW_FILE;
          printToConsoleInstead = false;
+         decimals = 2;
      }
 
     /**
@@ -48,31 +49,11 @@ public class Configs {
     }
 
     /**
-     * @return if the reading result of {@link AssetReaders} should be pasted to console.
+     * @param decimals is the amount of decimals that normally get kept/ round to.
+     * <p>Default: {@code 2}
      */
-    public static boolean hasPrintReadResult() {
-        return printReadResult;
-    }
-
-    /**
-     * @return what file type is being read.
-     */
-    public static SupportedFileType getFileType() {
-        return fileType;
-    }
-
-    /**
-     * @return the factor the coords get multiplied with when converting them to {@link com.github.NoctuaAstrum.utils.data.PointData}.
-     */
-    public static double getReadingScaleFactor() {
-        return readingScaleFactor;
-    }
-
-    /**
-     * @return what the name of the export file is.
-     */
-    public static String getExportName() {
-        return exportName;
+    public static void setRoundingDecimals(int decimals) {
+        Configs.decimals = decimals;
     }
 
     /**
@@ -84,25 +65,11 @@ public class Configs {
     }
 
     /**
-     * @return the directory that is getting imported from.
-     */
-    public static String getImportDirectory() {
-        return importDirectory;
-    }
-
-    /**
      * @param importDirectory is the directory the files that are getting imported from.
      *                        <p>DOES NOT CHANGE WHERE THE FILE WITH THE POINTS NEEDS TO BE.</p>
      */
     public static void setImportDirectory(String importDirectory) {
         Configs.importDirectory = importDirectory;
-    }
-
-    /**
-     * @return how the file is getting exported.
-     */
-    public static ExportMode getExportMode() {
-        return exportMode;
     }
 
     /**

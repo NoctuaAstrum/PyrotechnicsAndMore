@@ -22,18 +22,16 @@ import java.util.zip.ZipFile;
  public class PointReader {
     private final static Pattern pattern;
     private static LinkedHashMap<String, XYZData> mapData;
-    private static double scaleFactor;
 
 
     static{
         pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+E?[+-]?[0-9]?");
         mapData = new LinkedHashMap<>();
-        scaleFactor = Configs.getReadingScaleFactor();
     }
 
     public static PointData readFile(String filename){
         try {
-            switch (Configs.getFileType()){
+            switch (Configs.fileType){
                 case GGB -> {
                     return toPointData(readFileGGB0(filename));
                 }
@@ -93,7 +91,7 @@ import java.util.zip.ZipFile;
         return fileContent;
     }
     private static PointData toPointData(List<String> fileContent){
-        if(Configs.hasPrintReadResult()){fileContent.forEach(System.out::println);}
+        if(Configs.printReadResult){fileContent.forEach(System.out::println);}
         mapData = convertLines(fileContent);
         return new PointData(mapData);
     }

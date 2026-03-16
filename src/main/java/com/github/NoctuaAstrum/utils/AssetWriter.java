@@ -66,10 +66,10 @@ public class AssetWriter {
         List<String> code = cleanDefaultValues(Arrays.stream(FinalsAndMethods.gson.toJson(pS).split("\n")).toList());
         Path output;
 
-        if(Configs.getExportName().equals("undefined")){
+        if(Configs.exportName.equals("undefined")){
              output = Path.of("files/write/generated"+".particlesystem");
         }else {
-             output = Path.of("files/write/"+Configs.getExportName()+".particlesystem");
+             output = Path.of("files/write/"+Configs.exportMode+".particlesystem");
         }
         if(Configs.printToConsoleInstead){
             code.forEach(System.out::println);

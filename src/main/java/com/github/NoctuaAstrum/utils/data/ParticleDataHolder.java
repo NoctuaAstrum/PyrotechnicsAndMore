@@ -1,7 +1,6 @@
 package com.github.NoctuaAstrum.utils.data;
 
-import com.github.NoctuaAstrum.utils.Configs;
-import com.github.NoctuaAstrum.utils.PointReader;
+import com.github.NoctuaAstrum.utils.*;
 import com.github.NoctuaAstrum.utils.assets.particles.*;
 
 import java.util.ArrayList;
@@ -142,7 +141,7 @@ public class ParticleDataHolder {
     }
     
     private static double round(double rounding){
-        return (double) Math.round(rounding * 100) / 100;
+        return FinalsAndMethods.round(rounding);
     }
 
     /**
