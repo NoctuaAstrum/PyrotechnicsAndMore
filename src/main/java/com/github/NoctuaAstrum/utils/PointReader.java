@@ -125,18 +125,18 @@ import java.util.zip.ZipFile;
                 sentAlreadyAssignedWarning = true;
                 continue;
             }
-            /*if(current.contains("E-")){
+            if(current.contains("E-")){
                 logBuffer.add("[ERROR] Unable to read Point correctly! \"E-\" pattern found for point " + name +", but this is not supported. Point was skipped.");
                 sentPatternWarning = true;
-                continue;
-            }*/
+                //continue;
+            }
 
             matcher = pattern.matcher(current);
             pointCoords = new ArrayList<>();
 
             while (matcher.find()) {
-                String singleCoord = matcher.group();
-                pointCoords.add((double) Math.round((Double.parseDouble(singleCoord) * scaleFactor) * 100.0) / 100.0);
+                String coordString = matcher.group();
+                pointCoords.add(FinalsAndMethods.roundPoint(coordString));
             }
 
             if(!pointCoords.isEmpty() && !mapping.containsKey(name)){

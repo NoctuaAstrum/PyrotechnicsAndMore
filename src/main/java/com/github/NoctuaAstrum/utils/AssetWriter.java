@@ -1,9 +1,6 @@
 package com.github.NoctuaAstrum.utils;
 
 import com.github.NoctuaAstrum.utils.assets.particles.*;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,19 +63,22 @@ public class AssetWriter {
     // /////////////// File //////////////// //
     private static void toJsonFile0(ParticleSystem pS){
 
-        List<String> code = Arrays.stream(Configs.gson.toJson(pS).split("\n")).toList();
+        List<String> code = cleanDefaultValues(Arrays.stream(FinalsAndMethods.gson.toJson(pS).split("\n")).toList());
         Path output;
 
         if(Configs.getExportName().equals("undefined")){
              output = Path.of("files/write/generated"+".particlesystem");
         }else {
-             output = Path.of("files/write/"+Configs.getExportName()+".particlesystem");
+             output = Path.of("files/write/"+Configs.getExportName()+".particlesystem.txt");
         }
-
-        try {
-            Files.write(output, cleanDefaultValues(code));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(Configs.printToConsoleInstead){
+            code.forEach(System.out::println);
+        }else{
+            try {
+                Files.write(output, code);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public static void JsonFileTest(){

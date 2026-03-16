@@ -1,8 +1,5 @@
 package com.github.NoctuaAstrum.utils;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Controls the configurations of file creation and reading as well as logging tools
@@ -13,7 +10,8 @@ public class Configs {
     private static double readingScaleFactor;
     private static String exportName;
     private static String importDirectory;
-    static final Gson gson;
+    static boolean printToConsoleInstead;
+    
     private static ExportMode exportMode;
 
      static {
@@ -22,8 +20,8 @@ public class Configs {
          readingScaleFactor = 1;
          exportName = "Generated";
          importDirectory = "files/read/";
-         gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
          exportMode = ExportMode.NEW_FILE;
+         printToConsoleInstead = false;
      }
 
     /**
@@ -112,6 +110,13 @@ public class Configs {
      */
     public static void setExportMode(ExportMode exportMode) {
         Configs.exportMode = exportMode;
+    }
+    
+    /**
+     * the {@link com.github.NoctuaAstrum.utils.assets.particles.ParticleSystem} now gets printed into the console instead of into a new file
+     */
+    public static void printToConsoleInstead(){
+        printToConsoleInstead = true;
     }
 
     /**
