@@ -54,7 +54,7 @@ public class Main {
         //convert it to a particleSystem
         ParticleSystem exampleSystem = example.convertToParticleSystem();
 
-        //write it into a file (found in files/write/); filename is set in
+        //write it into a file (found in files/write/); filename is defined via configs
         AssetWriter.toJsonFile(exampleSystem);
         
     }
