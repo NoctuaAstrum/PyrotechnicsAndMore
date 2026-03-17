@@ -10,6 +10,7 @@ public class Configs {
     static double readingScaleFactor;
     static String exportName;
     static String importDirectory;
+    static String exportDirectory;
     static boolean printToConsoleInstead;
     static ExportMode exportMode;
     static int decimals;
@@ -20,6 +21,7 @@ public class Configs {
          readingScaleFactor = 1;
          exportName = "Generated";
          importDirectory = "files/read/";
+         exportDirectory = "files/write/";
          exportMode = ExportMode.NEW_FILE;
          printToConsoleInstead = false;
          decimals = 2;
@@ -69,9 +71,22 @@ public class Configs {
      *                        <p>DOES NOT CHANGE WHERE THE FILE WITH THE POINTS NEEDS TO BE.</p>
      */
     public static void setImportDirectory(String importDirectory) {
-        Configs.importDirectory = importDirectory;
+        Configs.importDirectory = validateDir(importDirectory);
     }
-
+    
+    /**
+     * @param exportDirectory is the directory the generated files get written into
+     */
+    
+    public static void setExportDirectory(String exportDirectory){
+        Configs.exportDirectory = validateDir(exportDirectory);
+    }
+    
+    private static String validateDir(String dir){
+        dir = dir.replace("\\","/").replace("//","/");
+        return dir.endsWith("/") ? dir : dir + "/";
+    }
+    
     /**
      * @param exportMode how the files should get exported.
      */
