@@ -135,4 +135,23 @@ public class Configs {
          */
         INJECT_NEW_FILE
     }
+
+    /**
+     * Dev Tool to access values outside of this package
+     */
+    public class Forwarder{
+        
+        /**
+         * @return true if either {@link Configs.ExportMode.INJECT_OVERWRITE} or {@link Configs.ExportMode.INJECT_NEW_FILE} is used
+         */
+        public static boolean hasInjectMode(){
+            switch(Configs.exportMode){
+                case Configs.ExportMode.INJECT_OVERWRITE,
+                     Configs.ExportMode.INJECT_NEW_FILE:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
 }
