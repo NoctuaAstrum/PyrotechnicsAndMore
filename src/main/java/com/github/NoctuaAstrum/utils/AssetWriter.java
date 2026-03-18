@@ -64,17 +64,13 @@ public class AssetWriter {
     private static void toJsonFile0(ParticleSystem pS){
 
         List<String> code = cleanDefaultValues(Arrays.stream(FinalsAndMethods.gson.toJson(pS).split("\n")).toList());
-        Path output;
-
-        if(Configs.exportName.equals("undefined")){
-             output = Path.of("files/write/generated"+".particlesystem");
-        }else {
-             output = Path.of("files/write/"+Configs.exportMode+".particlesystem");
-        }
+        Path output = Path.of(Configs.exportDirectory+Configs.exportName+".particlesystem");
+        
         if(Configs.printToConsoleInstead){
             code.forEach(System.out::println);
         }else{
             try {
+                Files.createDirectories(Path.of(Configs.exportDirectory));
                 Files.write(output, code);
             } catch (IOException e) {
                 throw new RuntimeException(e);
