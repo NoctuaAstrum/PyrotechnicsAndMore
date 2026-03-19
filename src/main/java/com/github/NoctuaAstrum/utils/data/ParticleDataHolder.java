@@ -155,7 +155,7 @@ public class ParticleDataHolder {
         private MinMaxData spawnRate;
         private int maxConcurrent;
         private double startDelay;
-        private ArrayList<AttractorData> attractors;
+        private ArrayList<AttractorData> attractors = new ArrayList<>();
         private double systemLifeSpan;
         private double systemCullDistance;
         private double systemBoundingRadius;
