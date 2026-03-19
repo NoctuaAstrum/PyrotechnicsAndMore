@@ -102,6 +102,14 @@ public class Configs {
     }
 
     /**
+     * IF YOU WANT TO HAVE A CUSTOM IMPORT DIRECTORY DEFINE IT FIRST USING {@link #setExportDirectory(String)}
+     * @param systemName is the name of the files / the ID of the Asset
+     */
+    public static void importSystem(String systemName){
+        AssetImporter.readAssetFile(systemName);
+    }
+
+    /**
      * Contains the filetypes that are supported.
      */
     public enum SupportedFileType{

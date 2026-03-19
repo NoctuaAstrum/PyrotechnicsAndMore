@@ -6,9 +6,11 @@ import com.google.gson.GsonBuilder;
 
 public class FinalsAndMethods {
     static final Gson gson;
+    static final AssetHolder importedSystems;
     
     static {
          gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+         importedSystems = new AssetHolder();
      }
     
     public static double roundPoint(double round){
