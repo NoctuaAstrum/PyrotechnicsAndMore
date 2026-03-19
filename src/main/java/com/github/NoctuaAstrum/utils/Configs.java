@@ -28,7 +28,7 @@ public class Configs {
      }
 
     /**
-     * @param printReadResult if {@code true} prints what {@link AssetReaders} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
+     * @param printReadResult if {@code true} prints what {@link PointReader} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
      *                        <p>Default: {@code false}</p>
      */
     public static void setPrintReadResult(boolean printReadResult) {
