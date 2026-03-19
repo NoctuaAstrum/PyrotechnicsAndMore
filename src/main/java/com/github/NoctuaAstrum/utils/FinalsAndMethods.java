@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class FinalsAndMethods {
-    static final Gson gson;
-    static final AssetHolder importedSystems;
+    public static final Gson gson;
+    public static final AssetHolder importedSystems;
     
     static {
          gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();

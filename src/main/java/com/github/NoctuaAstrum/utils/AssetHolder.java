@@ -2,13 +2,15 @@ package com.github.NoctuaAstrum.utils;
 
 import com.github.NoctuaAstrum.utils.assets.particles.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
-class AssetHolder {
-    private HashMap<String,ParticleSystem> importedAssets;
+public class AssetHolder {
+    private final HashMap<String,ParticleSystem> importedAssets;
         
-    public AssetHolder(){}
+    public AssetHolder(){
+        importedAssets = new HashMap<>();
+    }
         
     public void add(String fileName, ParticleSystem system){
         importedAssets.put(fileName, system);
@@ -19,5 +21,9 @@ class AssetHolder {
     }
     public ParticleSpawnerGroup[] getSpawnerGroup(String fileName){
         return get(fileName).spawners;
+    }
+
+    public Stream<ParticleSystem> stream(){
+        return importedAssets.values().stream();
     }
 }

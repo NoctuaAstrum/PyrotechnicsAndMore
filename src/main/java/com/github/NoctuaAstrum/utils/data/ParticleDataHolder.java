@@ -87,6 +87,10 @@ public class ParticleDataHolder {
                     emitOffset,
                     createParticleAttractorArray(p)
             )).toList();
+        if(Configs.Forwarder.hasInjectMode()){
+            FinalsAndMethods.importedSystems.stream().forEach(
+                    system -> psgList.addAll(Arrays.asList(system.spawners)));
+        }
         ParticleSpawnerGroup[] psgArray = new ParticleSpawnerGroup[psgList.size()];
         for(int i = 0; i < psgList.size();i++){
             psgArray[i] = psgList.get(i);
