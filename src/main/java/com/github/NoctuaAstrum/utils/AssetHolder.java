@@ -19,6 +19,12 @@ public class AssetHolder {
     public ParticleSystem get(String fileName){
         return importedAssets.get(fileName);
     }
+    public ParticleSystem getFirst(){
+        if(importedAssets.isEmpty()){return ParticleSystem.EMPTY;}
+        ParticleSystem[] pS = importedAssets.values().toArray(new ParticleSystem[0]);
+        return pS[0];
+    }
+    
     public ParticleSpawnerGroup[] getSpawnerGroup(String fileName){
         return get(fileName).spawners;
     }
