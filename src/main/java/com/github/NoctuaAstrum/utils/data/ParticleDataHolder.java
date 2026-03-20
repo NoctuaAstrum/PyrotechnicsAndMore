@@ -58,14 +58,27 @@ public class ParticleDataHolder {
      * @return returns the {@link ParticleDataHolder} as a {@link ParticleSystem}
      */
     public ParticleSystem convertToParticleSystem(){
-        return new ParticleSystem(
-            fileName,
-            systemLifeSpan,
-            createSpawnerGroupArray(),
-            systemCullDistance,
-            systemBoundingRadius,
-            systemIsImportant
-        );
+        if(!Configs.Forwarder.hasInjectMode()){
+            return new ParticleSystem(
+                fileName,
+                systemLifeSpan,
+                createSpawnerGroupArray(),
+                systemCullDistance,
+                systemBoundingRadius,
+                systemIsImportant
+            );
+        } else {
+            ParticleSystem ps = FinalsAndMethods.importedSystems.getFirst();
+            ParticleSpawnerGroup[] psgImport = ps.spawners;
+            ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
+            
+            ArrayList<ParticleSpawnerGroup> psgList = new ArrayList<>();
+            Arrays.stream(psgImport).forEach(psg -> psgList.add(psg));
+            Arrays.stream(psgPoints).forEach(psg -> psgList.add(psg));
+            
+            ps.spawners = psgList.toArray(new ParticleSpawnerGroup[0]);
+            return ps;
+        }
     }
     private ParticleSpawnerGroup[] createSpawnerGroupArray(){
         List<ParticleSpawnerGroup> psgList = pointData.dataMap().values().stream()
@@ -87,10 +100,6 @@ public class ParticleDataHolder {
                     emitOffset,
                     createParticleAttractorArray(p)
             )).toList();
-        if(Configs.Forwarder.hasInjectMode()){
-            FinalsAndMethods.importedSystems.stream().forEach(
-                    system -> psgList.addAll(Arrays.asList(system.spawners)));
-        }
         ParticleSpawnerGroup[] psgArray = new ParticleSpawnerGroup[psgList.size()];
         for(int i = 0; i < psgList.size();i++){
             psgArray[i] = psgList.get(i);
@@ -100,6 +109,7 @@ public class ParticleDataHolder {
     private ParticleAttractor[] createParticleAttractorArray(XYZData p){
 
         if(!attractors.isEmpty()){
+            //attractors.forEach()
             ParticleAttractor[] paArray = new ParticleAttractor[attractors.size()];
             for (int i = 0; i < paArray.length; i++) {
                 //System.out.println(i);
