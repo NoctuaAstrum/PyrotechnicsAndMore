@@ -11,7 +11,7 @@ import java.util.List;
  * Holds all relevant information to create the correct {@link ParticleSystem}
  */
 public class ParticleDataHolder {
-        public static final ParticleDataHolder TEST = createTest();
+        // public static final ParticleDataHolder TEST = createTest();
         public final String fileName;
         public final String particleSpawnerID;
         public final PointData pointData;
@@ -72,7 +72,7 @@ public class ParticleDataHolder {
             ParticleSystem ps = FinalsAndMethods.importedSystems.getFirst();
             ParticleSpawnerGroup[] psgImport = ps.spawners;
             ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
-            
+
             ArrayList<ParticleSpawnerGroup> psgList = new ArrayList<>();
             psgList.addAll(Arrays.asList(psgImport));
             psgList.addAll(Arrays.asList(psgPoints));
