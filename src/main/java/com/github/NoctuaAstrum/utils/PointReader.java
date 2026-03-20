@@ -22,18 +22,16 @@ import java.util.zip.ZipFile;
  public class PointReader {
     private final static Pattern pattern;
     private static LinkedHashMap<String, XYZData> mapData;
-    private static double scaleFactor;
 
 
     static{
-        pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+");
+        pattern  = Pattern.compile("-?[0-9]*\\.[0-9]+E?[+-]?[0-9]?");
         mapData = new LinkedHashMap<>();
-        scaleFactor = Configs.getReadingScaleFactor();
     }
 
     public static PointData readFile(String filename){
         try {
-            switch (Configs.getFileType()){
+            switch (Configs.fileType){
                 case GGB -> {
                     return toPointData(readFileGGB0(filename));
                 }
@@ -93,7 +91,7 @@ import java.util.zip.ZipFile;
         return fileContent;
     }
     private static PointData toPointData(List<String> fileContent){
-        if(Configs.hasPrintReadResult()){fileContent.forEach(System.out::println);}
+        if(Configs.printReadResult){fileContent.forEach(System.out::println);}
         mapData = convertLines(fileContent);
         return new PointData(mapData);
     }
@@ -108,9 +106,7 @@ import java.util.zip.ZipFile;
         Matcher matcher;
         String name = "";
         List<Double> pointCoords;
-        ArrayList<String> logBuffer = new ArrayList<>();
         boolean sentAlreadyAssignedWarning = false;
-        boolean sentPatternWarning = false;
         for (String current : s) {
             if (!(current.contains("="))) {
                 name = current;
@@ -125,18 +121,13 @@ import java.util.zip.ZipFile;
                 sentAlreadyAssignedWarning = true;
                 continue;
             }
-            if(current.contains("E-")){
-                logBuffer.add("[ERROR] Unable to read Point correctly! \"E-\" pattern found for point " + name +", but this is not supported. Point was skipped.");
-                sentPatternWarning = true;
-                continue;
-            }
 
             matcher = pattern.matcher(current);
             pointCoords = new ArrayList<>();
 
             while (matcher.find()) {
-                String singleCoord = matcher.group();
-                pointCoords.add((double) Math.round((Double.parseDouble(singleCoord) * scaleFactor) * 100.0) / 100.0);
+                String coordString = matcher.group();
+                pointCoords.add(FinalsAndMethods.roundPoint(coordString));
             }
 
             if(!pointCoords.isEmpty() && !mapping.containsKey(name)){
@@ -146,10 +137,6 @@ import java.util.zip.ZipFile;
         }
         if(sentAlreadyAssignedWarning){
             System.out.println("[WARNING-INFO] The prior warnings happened because the file included non point data that had coordinate data (e.g. lines). Normally this shouldn't cause any problems. Please check if the assigned value is correct. If not, please file a bug report including the file you wanted to read");
-        }
-        logBuffer.forEach(System.out::println);
-        if(sentPatternWarning){
-            System.out.println("[ERROR-INFO] These errors were caused, because a coordinate of the point was near 0.0 and to accommodate the detail, E notation was used by Geogebra, which is not currently supported. To fix this, please manually round the number in Geogebra.");
         }
         return mapping;
     }

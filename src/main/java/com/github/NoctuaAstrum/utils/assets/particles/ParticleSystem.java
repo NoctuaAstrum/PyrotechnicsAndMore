@@ -3,6 +3,7 @@ package com.github.NoctuaAstrum.utils.assets.particles;
 import java.util.Arrays;
 
 public class ParticleSystem{
+    public static final ParticleSystem EMPTY = new ParticleSystem("EMPTY",0.0,new ParticleSpawnerGroup[0],0,0,false);
     public String id;
     public double lifeSpan;
     public ParticleSpawnerGroup[] spawners;

@@ -1,7 +1,6 @@
 package com.github.NoctuaAstrum.utils.data;
 
-import com.github.NoctuaAstrum.utils.Configs;
-import com.github.NoctuaAstrum.utils.PointReader;
+import com.github.NoctuaAstrum.utils.*;
 import com.github.NoctuaAstrum.utils.assets.particles.*;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.List;
  * Holds all relevant information to create the correct {@link ParticleSystem}
  */
 public class ParticleDataHolder {
+        // public static final ParticleDataHolder TEST = createTest();
         public final String fileName;
         public final String particleSpawnerID;
         public final PointData pointData;
@@ -59,14 +59,27 @@ public class ParticleDataHolder {
      * @return returns the {@link ParticleDataHolder} as a {@link ParticleSystem}
      */
     public ParticleSystem convertToParticleSystem(){
-        return new ParticleSystem(
-            fileName,
-            systemLifeSpan,
-            createSpawnerGroupArray(),
-            systemCullDistance,
-            systemBoundingRadius,
-            systemIsImportant
-        );
+        if(!Configs.Forwarder.hasInjectMode()){
+            return new ParticleSystem(
+                fileName,
+                systemLifeSpan,
+                createSpawnerGroupArray(),
+                systemCullDistance,
+                systemBoundingRadius,
+                systemIsImportant
+            );
+        } else {
+            ParticleSystem ps = FinalsAndMethods.importedSystems.getFirst();
+            ParticleSpawnerGroup[] psgImport = ps.spawners;
+            ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
+
+            ArrayList<ParticleSpawnerGroup> psgList = new ArrayList<>();
+            psgList.addAll(Arrays.asList(psgImport));
+            psgList.addAll(Arrays.asList(psgPoints));
+            
+            ps.spawners = psgList.toArray(new ParticleSpawnerGroup[0]);
+            return ps;
+        }
     }
     private ParticleSpawnerGroup[] createSpawnerGroupArray(){
         List<ParticleSpawnerGroup> psgList = pointData.dataMap().values().stream()
@@ -97,6 +110,7 @@ public class ParticleDataHolder {
     private ParticleAttractor[] createParticleAttractorArray(XYZData p){
 
         if(!attractors.isEmpty()){
+            //attractors.forEach()
             ParticleAttractor[] paArray = new ParticleAttractor[attractors.size()];
             for (int i = 0; i < paArray.length; i++) {
                 //System.out.println(i);
@@ -142,9 +156,13 @@ public class ParticleDataHolder {
     }
     
     private static double round(double rounding){
-        return (double) Math.round(rounding * 100) / 100;
+        return FinalsAndMethods.round(rounding);
     }
 
+    private static ParticleDataHolder createTest(){
+        Configs.setFileType(Configs.SupportedFileType.XML);
+        return new ParticleDataHolder.Builder().build("TestPoints","Placeholder");
+    }
     /**
      * Builds the {@link ParticleDataHolder}
      */
@@ -156,7 +174,7 @@ public class ParticleDataHolder {
         private MinMaxData spawnRate;
         private int maxConcurrent;
         private double startDelay;
-        private ArrayList<AttractorData> attractors;
+        private ArrayList<AttractorData> attractors = new ArrayList<>();
         private double systemLifeSpan;
         private double systemCullDistance;
         private double systemBoundingRadius;
@@ -169,23 +187,83 @@ public class ParticleDataHolder {
         private VelocityData initialVelocity;
         private MinMaxXYZData emitOffset;
 
-        
-
+        /**
+         * @param centreOffset is the offset the center where all the points origin from, offset is from the center of the system
+         */
         public Builder centreOffset(XYZData centreOffset){this.centreOffset=centreOffset;return this;}
+
+        /**
+         * only one instance of the {@code ParticleSpawner} gets spawned at a time; combine it with {@link #totalSpawners(int)} to work correctly
+         */
         public Builder singleSpawn(){spawnRate = new MinMaxData(1,1);maxConcurrent = 1;return this;}
+
+        /**
+         * @param attractors is an undefined amount of {@link AttractorData}
+         */
         public Builder attractor(AttractorData... attractors){this.attractors = new ArrayList<>(Arrays.asList(attractors));return this;}
+
+        /**
+         * @param startDelay is the delay with what the {@code ParticleSpawner} gets spawned
+         */
         public Builder startDelay(double startDelay){this.startDelay = startDelay;return this;}
+
+        /**
+         * @param systemLifeSpan is how long the {@code ParticleSystem} lasts; {@code 0} means that it lasts infinitely
+         */
         public Builder systemLifeSpan(double systemLifeSpan){this.systemLifeSpan = systemLifeSpan;return this;}
+
+        /**
+         * @param systemCullDistance uhhhh, no idea how it fully works, but it controls how far you can get away without the {@link ParticleSystem} to disappear
+         */
         public Builder systemCullDistance(double systemCullDistance){this.systemCullDistance = systemCullDistance;return this;}
+
+        /**
+         * @param systemBoundingRadius completely no idea what it does
+         */
         public Builder systemBoundingRadius(double systemBoundingRadius){this.systemBoundingRadius = systemBoundingRadius;return this;}
+
+        /**
+         * sets {@link #systemBoundingRadius(double)} and {@link #systemCullDistance(double)} to {@code 100} and {@link #systemIsImportant()} to true
+         */
         public Builder standardImportantSetup(){systemBoundingRadius = 100; systemCullDistance = 100; systemIsImportant = true; return this;}
+
+        /**
+         * the {@link ParticleSystem} now doesn't derender when it is out of view, but you are still in its {@link #systemCullDistance(double)}
+         */
         public Builder systemIsImportant(){systemIsImportant = true;return this;}
+
+        /**
+         * @param spawnerLifeSpan is how long an instance of a {@code ParticleSpawner} lasts; {@code 0} means that it lasts as long the {@link ParticleSystem} is active
+         */
         public Builder spawnerLifeSpan(MinMaxData spawnerLifeSpan){this.spawnerLifeSpan = spawnerLifeSpan;return this;}
+
+        /**
+         * @param rotationOffset is the rotation the {@code ParticleSpawner} gets additionally rotated on spawn
+         */
         public Builder rotationOffset(RotationData rotationOffset){this.rotationOffset = rotationOffset;return this;}
+
+        /**
+         * @param waveDelay is the time difference between the spawn of the {@code ParticleSpawner}; waits for all of its particles to disappear before starting, so it should either have a lifespan or a maximal amount of total particles
+         */
         public Builder waveDelay(MinMaxData waveDelay){this.waveDelay = waveDelay;return this;}
+
+        /**
+         * the {@code ParticleSpawner} now doesn't rotate with the {@link ParticleSystem}
+         */
         public Builder hasFixedRotation(){fixedRotation = true;return this;}
+
+        /**
+         * @param totalSpawners is the total amount of {@code ParticleSpawners} that get spawned
+
+         */
         public Builder totalSpawners(int totalSpawners){this.totalSpawners = totalSpawners;return this;}
+
+        /**
+         * @param initialVelocity is the initial velocity vector the {@code ParticleSpawner} has
+         */
         public Builder initialVelocity(VelocityData initialVelocity){this.initialVelocity = initialVelocity;return this;}
+
+
         public Builder emitOffset(MinMaxXYZData emitOffset){this.emitOffset = emitOffset;return this;}
 
 
@@ -200,16 +278,6 @@ public class ParticleDataHolder {
             this.particleSpawnerID = particleSpawnerID;
             this.pointData = PointReader.readFile(filename);
             return new ParticleDataHolder(this);
-        }
-    }
-    public enum Preset{
-        TEST(new ParticleDataHolder.Builder().build("TestPoints","Placeholder"));
-        private final ParticleDataHolder PDH;
-        Preset(ParticleDataHolder pdh){
-            PDH = pdh;
-        }
-        public ParticleDataHolder get(){
-            return PDH;
         }
     }
 }

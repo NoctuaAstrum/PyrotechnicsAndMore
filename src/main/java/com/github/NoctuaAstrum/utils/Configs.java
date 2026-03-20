@@ -1,20 +1,19 @@
 package com.github.NoctuaAstrum.utils;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Controls the configurations of file creation and reading as well as logging tools
  */
 public class Configs {
-    private static boolean printReadResult;
-    private static SupportedFileType fileType;
-    private static double readingScaleFactor;
-    private static String exportName;
-    private static String importDirectory;
-    static final Gson gson;
-    private static ExportMode exportMode;
+    static boolean printReadResult;
+    static SupportedFileType fileType;
+    static double readingScaleFactor;
+    static String exportName;
+    static String importDirectory;
+    static String exportDirectory;
+    static boolean printToConsoleInstead;
+    static ExportMode exportMode;
+    static int decimals;
 
      static {
          printReadResult = false;
@@ -22,12 +21,14 @@ public class Configs {
          readingScaleFactor = 1;
          exportName = "Generated";
          importDirectory = "files/read/";
-         gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+         exportDirectory = "files/write/";
          exportMode = ExportMode.NEW_FILE;
+         printToConsoleInstead = false;
+         decimals = 2;
      }
 
     /**
-     * @param printReadResult if {@code true} prints what {@link AssetReaders} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
+     * @param printReadResult if {@code true} prints what {@link PointReader} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
      *                        <p>Default: {@code false}</p>
      */
     public static void setPrintReadResult(boolean printReadResult) {
@@ -50,31 +51,11 @@ public class Configs {
     }
 
     /**
-     * @return if the reading result of {@link AssetReaders} should be pasted to console.
+     * @param decimals is the amount of decimals that normally get kept/ round to.
+     * <p>Default: {@code 2}
      */
-    public static boolean hasPrintReadResult() {
-        return printReadResult;
-    }
-
-    /**
-     * @return what file type is being read.
-     */
-    public static SupportedFileType getFileType() {
-        return fileType;
-    }
-
-    /**
-     * @return the factor the coords get multiplied with when converting them to {@link com.github.NoctuaAstrum.utils.data.PointData}.
-     */
-    public static double getReadingScaleFactor() {
-        return readingScaleFactor;
-    }
-
-    /**
-     * @return what the name of the export file is.
-     */
-    public static String getExportName() {
-        return exportName;
+    public static void setRoundingDecimals(int decimals) {
+        Configs.decimals = decimals;
     }
 
     /**
@@ -86,32 +67,46 @@ public class Configs {
     }
 
     /**
-     * @return the directory that is getting imported from.
-     */
-    public static String getImportDirectory() {
-        return importDirectory;
-    }
-
-    /**
      * @param importDirectory is the directory the files that are getting imported from.
      *                        <p>DOES NOT CHANGE WHERE THE FILE WITH THE POINTS NEEDS TO BE.</p>
      */
     public static void setImportDirectory(String importDirectory) {
-        Configs.importDirectory = importDirectory;
+        Configs.importDirectory = validateDir(importDirectory);
     }
-
+    
     /**
-     * @return how the file is getting exported.
+     * @param exportDirectory is the directory the generated files get written into
      */
-    public static ExportMode getExportMode() {
-        return exportMode;
+    
+    public static void setExportDirectory(String exportDirectory){
+        Configs.exportDirectory = validateDir(exportDirectory);
     }
-
+    
+    private static String validateDir(String dir){
+        dir = dir.replace("\\","/").replace("//","/");
+        return dir.endsWith("/") ? dir : dir + "/";
+    }
+    
     /**
      * @param exportMode how the files should get exported.
      */
     public static void setExportMode(ExportMode exportMode) {
         Configs.exportMode = exportMode;
+    }
+    
+    /**
+     * the {@link com.github.NoctuaAstrum.utils.assets.particles.ParticleSystem} now gets printed into the console instead of into a new file
+     */
+    public static void printToConsoleInstead(){
+        printToConsoleInstead = true;
+    }
+
+    /**
+     * IF YOU WANT TO HAVE A CUSTOM IMPORT DIRECTORY DEFINE IT FIRST USING {@link #setExportDirectory(String)}
+     * @param systemName is the name of the files / the ID of the Asset
+     */
+    public static void importSystem(String systemName){
+        AssetImporter.readAssetFile(systemName);
     }
 
     /**
@@ -135,7 +130,7 @@ public class Configs {
      */
     public enum ExportMode{
         /**
-         * A new file is created. Disables the import of a .particleSystem File
+         * A new file is created
          */
         NEW_FILE,
         /**
@@ -147,5 +142,21 @@ public class Configs {
          * Injects the points into the imported .particleSystem file and creates a new one.
          */
         INJECT_NEW_FILE
+    }
+
+    /**
+     * Dev Tool to access values outside of this package
+     */
+    public static class Forwarder{
+        
+        /**
+         * @return true if either {@link ExportMode#INJECT_OVERWRITE} or {@link ExportMode#INJECT_NEW_FILE} is used
+         */
+        public static boolean hasInjectMode(){
+            return switch (Configs.exportMode) {
+                case ExportMode.INJECT_OVERWRITE, ExportMode.INJECT_NEW_FILE -> true;
+                default -> false;
+            };
+        }
     }
 }
