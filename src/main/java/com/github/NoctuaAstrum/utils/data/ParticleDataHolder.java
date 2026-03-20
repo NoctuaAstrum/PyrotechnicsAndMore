@@ -74,8 +74,8 @@ public class ParticleDataHolder {
             ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
             
             ArrayList<ParticleSpawnerGroup> psgList = new ArrayList<>();
-            Arrays.stream(psgImport).forEach(psg -> psgList.add(psg));
-            Arrays.stream(psgPoints).forEach(psg -> psgList.add(psg));
+            psgList.addAll(Arrays.asList(psgImport));
+            psgList.addAll(Arrays.asList(psgPoints));
             
             ps.spawners = psgList.toArray(new ParticleSpawnerGroup[0]);
             return ps;

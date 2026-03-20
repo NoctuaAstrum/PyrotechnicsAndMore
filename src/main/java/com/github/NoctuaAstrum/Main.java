@@ -24,6 +24,7 @@ public class Main {
         Configs.setPrintReadResult(true);
         Configs.setFileType(Configs.SupportedFileType.GGB);
         Configs.setExportName("EXAMPLE");
+        Configs.setExportMode(Configs.ExportMode.NEW_FILE);
         Configs.setReadingScaleFactor(0.1);
 
         //an example//

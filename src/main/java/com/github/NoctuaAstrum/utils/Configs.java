@@ -130,7 +130,7 @@ public class Configs {
      */
     public enum ExportMode{
         /**
-         * A new file is created. Disables the import of a .particleSystem File
+         * A new file is created
          */
         NEW_FILE,
         /**

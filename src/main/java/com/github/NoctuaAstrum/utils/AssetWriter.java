@@ -64,7 +64,13 @@ public class AssetWriter {
     private static void toJsonFile0(ParticleSystem pS){
 
         List<String> code = cleanDefaultValues(Arrays.stream(FinalsAndMethods.gson.toJson(pS).split("\n")).toList());
-        Path output = Path.of(Configs.exportDirectory+Configs.exportName+".particlesystem");
+        Path output =
+                switch (Configs.exportMode) {
+                    case INJECT_OVERWRITE
+                            -> Path.of(Configs.exportDirectory + FinalsAndMethods.importedSystems.getFirst().id + ".particlesystem");
+                    default
+                            -> Path.of(Configs.exportDirectory + Configs.exportName + ".particlesystem");
+                };
         
         if(Configs.printToConsoleInstead){
             code.forEach(System.out::println);
