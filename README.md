@@ -15,7 +15,7 @@ Currently, you need to have a Geogebra file that contains points in the graphing
 4) Specify your settings using Configs.\[configToChange]
 5) Create a new ParticleDataHolder using its builder subclass (I'll make a list of all the methods later)
 6) Convert the ParticleDataHolder to a ParticleSystem using yourParticleDataHolder.convertToParticleSystem() and write the file using AssetWriter.toJsonFile(yourParticleSpawner)
-7) Run the programm and find your file under files/write/
+7) Run the program and find your file under files/write/ or your specified export directory
 
 ### Contribute and future plans
 Feel free to add your own features to this project. If you want something added or want to add something please make an issue for it.
