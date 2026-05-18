@@ -2,6 +2,7 @@ package com.github.NoctuaAstrum;
 
 
 import com.github.NoctuaAstrum.utils.*;
+import com.github.NoctuaAstrum.utils.assets.AssetManager;
 import com.github.NoctuaAstrum.utils.assets.particles.ParticleSystem;
 import com.github.NoctuaAstrum.utils.data.*;
 
@@ -19,10 +20,11 @@ public class Main {
 
         // /////////////// NOTICE //////////////// //
 
+        //UI.run();
 
         //example configs//
         Configs.setPrintReadResult(true);
-        Configs.setFileType(Configs.SupportedFileType.GGB);
+        Configs.setPointImportFileType(Configs.SupportedFileType.GGB);
         Configs.setExportName("EXAMPLE");
         Configs.setExportMode(Configs.ExportMode.NEW_FILE);
         Configs.setReadingScaleFactor(0.1);
@@ -52,11 +54,11 @@ public class Main {
                         //build it
                         .build("Hylogo","YourParticleSpawner");
 
-        //convert it to a particleSystem
-        ParticleSystem exampleSystem = example.convertToParticleSystem();
+        //convert it to a particleSystem; write here the imported asset that should get overwritten, if it is enabled, else you can write anything
+        ParticleSystem exampleSystem = example.convertToParticleSystem("none");
 
         //write it into a file (found in files/write/); filename is defined via configs
-        AssetWriter.toJsonFile(exampleSystem);
+        AssetManager.Exporter.particleSystemToJsonFile(exampleSystem);
         
     }
 }

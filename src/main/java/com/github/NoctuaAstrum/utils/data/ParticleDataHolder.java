@@ -1,6 +1,7 @@
 package com.github.NoctuaAstrum.utils.data;
 
 import com.github.NoctuaAstrum.utils.*;
+import com.github.NoctuaAstrum.utils.assets.AssetManager;
 import com.github.NoctuaAstrum.utils.assets.particles.*;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class ParticleDataHolder {
     /**
      * @return returns the {@link ParticleDataHolder} as a {@link ParticleSystem}
      */
-    public ParticleSystem convertToParticleSystem(){
+    public ParticleSystem convertToParticleSystem(String overwrittenAssetName){
         if(!Configs.Forwarder.hasInjectMode()){
             return new ParticleSystem(
                 fileName,
@@ -69,7 +70,8 @@ public class ParticleDataHolder {
                 systemIsImportant
             );
         } else {
-            ParticleSystem ps = FinalsAndMethods.importedSystems.getFirst();
+            Configs.Forwarder.setActiveOverwrittenAsset(overwrittenAssetName);
+            ParticleSystem ps = (ParticleSystem) AssetManager.getParticleSystemMap().get(overwrittenAssetName);
             ParticleSpawnerGroup[] psgImport = ps.spawners;
             ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
 
@@ -159,11 +161,11 @@ public class ParticleDataHolder {
     }
     
     private static double round(double rounding){
-        return FinalsAndMethods.round(rounding);
+        return MathUtil.round(rounding);
     }
 
     private static ParticleDataHolder createTest(){
-        Configs.setFileType(Configs.SupportedFileType.XML);
+        Configs.setPointImportFileType(Configs.SupportedFileType.XML);
         return new ParticleDataHolder.Builder().build("TestPoints","Placeholder");
     }
     /**
@@ -272,14 +274,14 @@ public class ParticleDataHolder {
 
         /***
          * Builds the {@link ParticleDataHolder} and inputs always required variables
-         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#setFileType(Configs.SupportedFileType)}
+         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#setPointImportFileType(Configs.SupportedFileType)}
          * @param particleSpawnerID the ID of the particleSpawner that is used for the point
          * @return returns a {@link ParticleDataHolder}
          */
         public ParticleDataHolder build(String filename, String particleSpawnerID){
             this.fileName = filename;
             this.particleSpawnerID = particleSpawnerID;
-            this.pointData = PointReader.readFile(filename);
+            this.pointData = FileIO.PointReader.readFileAsPointData(filename);
             return new ParticleDataHolder(this);
         }
     }
