@@ -147,11 +147,14 @@ public class ParticleDataHolder {
         AttractorData currentAttractor = attractors.get(attractorNumber);
         if(currentAttractor.expandPointShape){
             return new XYZData(
-                    round(p.x()*currentAttractor.pointShapeExpansionFactor),
-                    round(p.y()*currentAttractor.pointShapeExpansionFactor),
-                    round(p.z()*currentAttractor.pointShapeExpansionFactor));
+                    round(p.x()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.x()),
+                    round(p.y()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.y()),
+                    round(p.z()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.z()));
         }else{
-            return null;
+            return new XYZData(
+                    round(currentAttractor.linearImpulses.x()),
+                    round(currentAttractor.linearImpulses.y()),
+                    round(currentAttractor.linearImpulses.z()));
         }
     }
     
@@ -170,7 +173,7 @@ public class ParticleDataHolder {
         private String fileName;
         private String particleSpawnerID;
         private PointData pointData;
-        private XYZData centreOffset = new XYZData(0,0,0);
+        private XYZData centreOffset = XYZData.EMPTY;
         private MinMaxData spawnRate;
         private int maxConcurrent;
         private double startDelay;

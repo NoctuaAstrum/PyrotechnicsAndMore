@@ -7,6 +7,7 @@ package com.github.NoctuaAstrum.utils.data;
  * @param z z position, offset, acceleration, impulse, damping or axis
  */
 public record XYZData(double x, double y, double z) {
+    public static final XYZData EMPTY = new XYZData(0,0,0);
     /**
      * Same as {@link XYZData}, but {@link XYZData#z()} is 0
      */
