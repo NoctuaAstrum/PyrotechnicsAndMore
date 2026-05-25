@@ -6,6 +6,7 @@ import com.github.NoctuaAstrum.utils.assets.AssetType;
 import com.github.NoctuaAstrum.utils.data.PointData;
 import com.github.NoctuaAstrum.utils.data.XYZData;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,25 +124,35 @@ public class FileIO {
         public static PointData readFileAsPointData(String filename) {
             switch (Configs.pointImportFileType) {
                 case GGB -> {
-                    return toPointData(readFileGGB0(filename));
+                    return toPointData(readFileGGB(filename));
                 }
                 case XML -> {
-                    return toPointData(readFileXML0(filename));
+                    return toPointData(readFileXML(filename));
+                }
+                case JSON -> {
+                    return fromJson(readFileJSON(filename));
                 }
                 case null, default -> {
-                    System.out.println("Error! FileType is neither .ggb nor .xml;");
+                    System.out.println("Error! FileType is neither .ggb nor .xml nor .json!");
                     return null;
                 }
             }
         }
 
-        private static List<String> readFileGGB0(String filename) {
+        private static Double[][] readFileJSON(String filename){
+            Path jsonPath = Paths.get(Configs.pointImportDirectory + filename + Configs.SupportedFileType.JSON.FILE_ENDING);
+            BufferedReader jsonReader = getReader(jsonPath);
+            if(jsonReader == null)return new Double[0][0];
+
+            return Json.GSON.fromJson(jsonReader, Double[][].class);
+        }
+        private static List<String> readFileGGB(String filename) {
             Path ggbPath = Paths.get(Configs.pointImportDirectory + filename + Configs.SupportedFileType.GGB.FILE_ENDING);
             return filterXmlPointsFile(readSingleEntryFromZipFile(ggbPath, "geogebra.xml"));
         }
 
-        private static List<String> readFileXML0(String filename){
-            Path pathXML = Path.of(Configs.pointImportDirectory+ filename + Configs.SupportedFileType.XML.FILE_ENDING);
+        private static List<String> readFileXML(String filename){
+            Path pathXML = Path.of(Configs.pointImportDirectory + filename + Configs.SupportedFileType.XML.FILE_ENDING);
             return filterXmlPointsFile(readFile(pathXML));
         }
 
@@ -156,6 +167,27 @@ public class FileIO {
                 fileContent.forEach(System.out::println);
             }
             mapData = convertLines(fileContent);
+            return new PointData(mapData);
+        }
+        private static PointData fromJson(Double[][] groups){
+            LinkedHashMap<String, XYZData> mapping = new LinkedHashMap<>();
+            int id = 0;
+            for(Double[] group: groups){
+                int size = group.length;
+                if(size%2 !=0)break;
+                for(int i = 0;i<size;i+=2){
+                    mapping.put(
+                            Integer.toString(id),
+                            new XYZData(
+                                    MathUtil.roundPoint(group[i]),
+                                    MathUtil.roundPoint(group[i+1])
+                            )
+                    );
+
+                    id++;
+                }
+            }
+            mapData = mapping;
             return new PointData(mapData);
         }
 

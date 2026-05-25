@@ -34,7 +34,10 @@ public class Configs {
      }
 
     /**
-     * @param printReadResult if {@code true} prints what {@link FileIO.PointReader} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
+     * @param printReadResult I {@code true} prints what {@link FileIO.PointReader} reads before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}.
+     *                        <br/>
+     *                        <br/> It only works for {@link Configs.SupportedFileType#GGB} or {@link Configs.SupportedFileType#XML}.
+     *                        <br/>
      *                        <p>Default: {@code false}</p>
      */
     public static void setPrintReadResult(boolean printReadResult) {
@@ -135,7 +138,12 @@ public class Configs {
         /**
          * The file containing the points is a .ggb file.
          */
-        GGB(".ggb");
+        GGB(".ggb"),
+
+        /**
+         * The file containing the points is a .json file with the format of <a href="https://shinao.github.io/PathToPoints/">Shinao's Path to Points<a/>
+         */
+        JSON(".json");
 
         public final String FILE_ENDING;
 
