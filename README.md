@@ -25,5 +25,5 @@ Feel free to add your own features to this project. If you want something added 
 The currently planned features are:
 - add example spawners
 - add QoL methods for creating a particleSystem
-- add support for [Shinao's Path to Points](https://shinao.github.io/PathToPoints/) and integrate it later
+- integrate [Shinao's Path to Points](https://shinao.github.io/PathToPoints/)
 - add a GUI
