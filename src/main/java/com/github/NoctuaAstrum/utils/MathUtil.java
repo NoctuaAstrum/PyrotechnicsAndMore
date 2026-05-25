@@ -1,18 +1,7 @@
 package com.github.NoctuaAstrum.utils;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+public class MathUtil {
 
-public class FinalsAndMethods {
-    public static final Gson gson;
-    public static final AssetHolder importedSystems;
-    
-    static {
-         gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
-         importedSystems = new AssetHolder();
-     }
-    
     public static double roundPoint(double round){
          return round(round,Configs.readingScaleFactor);
     }

@@ -1,6 +1,7 @@
 package com.github.NoctuaAstrum.utils.data;
 
 import com.github.NoctuaAstrum.utils.*;
+import com.github.NoctuaAstrum.utils.assets.AssetManager;
 import com.github.NoctuaAstrum.utils.assets.particles.*;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class ParticleDataHolder {
     /**
      * @return returns the {@link ParticleDataHolder} as a {@link ParticleSystem}
      */
-    public ParticleSystem convertToParticleSystem(){
+    public ParticleSystem convertToParticleSystem(String overwrittenAssetName){
         if(!Configs.Forwarder.hasInjectMode()){
             return new ParticleSystem(
                 fileName,
@@ -69,7 +70,8 @@ public class ParticleDataHolder {
                 systemIsImportant
             );
         } else {
-            ParticleSystem ps = FinalsAndMethods.importedSystems.getFirst();
+            Configs.Forwarder.setActiveOverwrittenAsset(overwrittenAssetName);
+            ParticleSystem ps = (ParticleSystem) AssetManager.getParticleSystemMap().get(overwrittenAssetName);
             ParticleSpawnerGroup[] psgImport = ps.spawners;
             ParticleSpawnerGroup[] psgPoints = createSpawnerGroupArray();
 
@@ -147,20 +149,23 @@ public class ParticleDataHolder {
         AttractorData currentAttractor = attractors.get(attractorNumber);
         if(currentAttractor.expandPointShape){
             return new XYZData(
-                    round(p.x()*currentAttractor.pointShapeExpansionFactor),
-                    round(p.y()*currentAttractor.pointShapeExpansionFactor),
-                    round(p.z()*currentAttractor.pointShapeExpansionFactor));
+                    round(p.x()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.x()),
+                    round(p.y()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.y()),
+                    round(p.z()*currentAttractor.pointShapeExpansionFactor+currentAttractor.linearImpulses.z()));
         }else{
-            return null;
+            return new XYZData(
+                    round(currentAttractor.linearImpulses.x()),
+                    round(currentAttractor.linearImpulses.y()),
+                    round(currentAttractor.linearImpulses.z()));
         }
     }
     
     private static double round(double rounding){
-        return FinalsAndMethods.round(rounding);
+        return MathUtil.round(rounding);
     }
 
     private static ParticleDataHolder createTest(){
-        Configs.setFileType(Configs.SupportedFileType.XML);
+        Configs.setPointImportFileType(Configs.SupportedFileType.XML);
         return new ParticleDataHolder.Builder().build("TestPoints","Placeholder");
     }
     /**
@@ -170,7 +175,7 @@ public class ParticleDataHolder {
         private String fileName;
         private String particleSpawnerID;
         private PointData pointData;
-        private XYZData centreOffset = new XYZData(0,0,0);
+        private XYZData centreOffset = XYZData.EMPTY;
         private MinMaxData spawnRate;
         private int maxConcurrent;
         private double startDelay;
@@ -269,14 +274,14 @@ public class ParticleDataHolder {
 
         /***
          * Builds the {@link ParticleDataHolder} and inputs always required variables
-         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#setFileType(Configs.SupportedFileType)}
+         * @param filename name of the file that contains the points, filetype is defined in {@link Configs#setPointImportFileType(Configs.SupportedFileType)}
          * @param particleSpawnerID the ID of the particleSpawner that is used for the point
          * @return returns a {@link ParticleDataHolder}
          */
         public ParticleDataHolder build(String filename, String particleSpawnerID){
             this.fileName = filename;
             this.particleSpawnerID = particleSpawnerID;
-            this.pointData = PointReader.readFile(filename);
+            this.pointData = FileIO.PointReader.readFileAsPointData(filename);
             return new ParticleDataHolder(this);
         }
     }

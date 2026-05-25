@@ -1,15 +1,20 @@
 package com.github.NoctuaAstrum.utils;
 
 
+import com.github.NoctuaAstrum.utils.assets.AssetManager;
+import com.github.NoctuaAstrum.utils.assets.AssetType;
+
 /**
  * Controls the configurations of file creation and reading as well as logging tools
  */
 public class Configs {
     static boolean printReadResult;
-    static SupportedFileType fileType;
+    static SupportedFileType pointImportFileType;
     static double readingScaleFactor;
     static String exportName;
-    static String importDirectory;
+    static String activeOverwrittenAsset;
+    static String pointImportDirectory;
+    static String assetImportDirectory;
     static String exportDirectory;
     static boolean printToConsoleInstead;
     static ExportMode exportMode;
@@ -17,10 +22,11 @@ public class Configs {
 
      static {
          printReadResult = false;
-         fileType = SupportedFileType.GGB;
+         pointImportFileType = SupportedFileType.GGB;
          readingScaleFactor = 1;
          exportName = "Generated";
-         importDirectory = "files/read/";
+         pointImportDirectory = "files/read/";
+         assetImportDirectory = "files/read/";
          exportDirectory = "files/write/";
          exportMode = ExportMode.NEW_FILE;
          printToConsoleInstead = false;
@@ -28,7 +34,10 @@ public class Configs {
      }
 
     /**
-     * @param printReadResult if {@code true} prints what {@link PointReader} read before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}
+     * @param printReadResult I {@code true} prints what {@link FileIO.PointReader} reads before converting it to {@link com.github.NoctuaAstrum.utils.data.PointData}.
+     *                        <br/>
+     *                        <br/> It only works for {@link Configs.SupportedFileType#GGB} or {@link Configs.SupportedFileType#XML}.
+     *                        <br/>
      *                        <p>Default: {@code false}</p>
      */
     public static void setPrintReadResult(boolean printReadResult) {
@@ -39,8 +48,8 @@ public class Configs {
      * Sets the filetype that is being read
      * <p>Default: {@link SupportedFileType#GGB}</p>
      */
-    public static void setFileType(SupportedFileType fileType) {
-        Configs.fileType = fileType;
+    public static void setPointImportFileType(SupportedFileType pointImportFileType) {
+        Configs.pointImportFileType = pointImportFileType;
     }
 
     /**
@@ -67,11 +76,11 @@ public class Configs {
     }
 
     /**
-     * @param importDirectory is the directory the files that are getting imported from.
+     * @param pointImportDirectory is the directory the files that are getting imported from.
      *                        <p>DOES NOT CHANGE WHERE THE FILE WITH THE POINTS NEEDS TO BE.</p>
      */
-    public static void setImportDirectory(String importDirectory) {
-        Configs.importDirectory = validateDir(importDirectory);
+    public static void setPointImportDirectory(String pointImportDirectory) {
+        Configs.pointImportDirectory = validateDir(pointImportDirectory);
     }
     
     /**
@@ -105,8 +114,15 @@ public class Configs {
      * IF YOU WANT TO HAVE A CUSTOM IMPORT DIRECTORY DEFINE IT FIRST USING {@link #setExportDirectory(String)}
      * @param systemName is the name of the files / the ID of the Asset
      */
-    public static void importSystem(String systemName){
-        AssetImporter.readAssetFile(systemName);
+    public static void importAsset(String systemName, AssetType assetType){
+        AssetManager.Importer.readAssetFile(systemName,assetType);
+    }
+
+    /**
+     * @param assetImportDirectory is the  filePath the Assets get imported from
+     */
+    public static void setAssetImportDirectory(String assetImportDirectory) {
+        Configs.assetImportDirectory = assetImportDirectory;
     }
 
     /**
@@ -118,11 +134,23 @@ public class Configs {
          * else there is the possibility that points aren't read correctly).
          * <p>It would be best to use {@link SupportedFileType#GGB}.
          */
-        XML,
+        XML(".xml"),
         /**
          * The file containing the points is a .ggb file.
          */
-        GGB
+        GGB(".ggb"),
+
+        /**
+         * The file containing the points is a .json file with the format of <a href="https://shinao.github.io/PathToPoints/">Shinao's Path to Points<a/>
+         */
+        JSON(".json");
+
+        public final String FILE_ENDING;
+
+        SupportedFileType(String fileEnding){
+            this.FILE_ENDING = fileEnding;
+        }
+
     }
 
     /**
@@ -157,6 +185,12 @@ public class Configs {
                 case ExportMode.INJECT_OVERWRITE, ExportMode.INJECT_NEW_FILE -> true;
                 default -> false;
             };
+        }
+        public static String getActiveOverwrittenAsset(){
+            return activeOverwrittenAsset;
+        }
+        public static void setActiveOverwrittenAsset(String activeOverwrittenAsset){
+            Configs.activeOverwrittenAsset = activeOverwrittenAsset;
         }
     }
 }

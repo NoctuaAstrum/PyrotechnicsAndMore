@@ -1,5 +1,7 @@
 ### About
-This project aims to help Hytale modders with creating shapes using particleSpawners as Dots (you'll need to have a custom one currently, I'll add some templates later). It is currently in development, but most of the basic features are implemented.
+This project aims to help Hytale modders with creating shapes using particleSpawners as Dots (you'll need to have a custom one currently, I'll add some templates later). 
+> [!Note]\
+> It is currently in development, but most of the basic features are implemented.
 
 #### Attributions
 [Gson](https://github.com/google/gson) is used to create the json syntax
@@ -21,6 +23,7 @@ Currently, you need to have a Geogebra file that contains points in the graphing
 Feel free to add your own features to this project. If you want something added or want to add something please make an issue for it.
 
 The currently planned features are:
+- add example spawners
 - add QoL methods for creating a particleSystem
-- add support for [Shinao's Path to Points](https://shinao.github.io/PathToPoints/) and integrate it later
+- integrate [Shinao's Path to Points](https://shinao.github.io/PathToPoints/)
 - add a GUI

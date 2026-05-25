@@ -1,8 +1,10 @@
 package com.github.NoctuaAstrum.utils.assets.particles;
 
+import com.github.NoctuaAstrum.utils.assets.Asset;
+
 import java.util.Arrays;
 
-public class ParticleSystem{
+public class ParticleSystem implements Asset{
     public static final ParticleSystem EMPTY = new ParticleSystem("EMPTY",0.0,new ParticleSpawnerGroup[0],0,0,false);
     public String id;
     public double lifeSpan;

@@ -49,7 +49,7 @@ public class AttractorData {
         private XYZData linearAccelerations;
         private double radialImpulse;
         private double radialTangentImpulse;
-        private XYZData linearImpulses;
+        private XYZData linearImpulses = XYZData.EMPTY;
         private XYZData dampingMultipliers;
         private boolean expandPointShape;
         private double pointShapeExpansionFactor;

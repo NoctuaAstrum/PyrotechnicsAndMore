@@ -79,14 +79,4 @@ public class ParticleSpawnerGroup{
          + Arrays.toString(this.attractors)
          + "}";
    }
-   public enum Preset{
-      TEST(new ParticleSpawnerGroup("Placeholder",new XYZData(2,0,2),null,false,null,null,1,null,1,0,null,null,new ParticleAttractor[]{ParticleAttractor.Preset.TEST.get(), ParticleAttractor.Preset.TEST.get()}));
-      private final ParticleSpawnerGroup PSG;
-      Preset(ParticleSpawnerGroup psg){
-         PSG = psg;
-      }
-      public ParticleSpawnerGroup get(){
-         return PSG;
-      }
-   }
 }
